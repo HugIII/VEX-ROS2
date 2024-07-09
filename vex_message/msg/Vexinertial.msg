@@ -1,0 +1,9 @@
+uint16 port
+float32 accelerationx
+float32 accelerationy
+float32 accelerationz
+float32 heading
+float32 orientation_pitch
+float32 orientation_roll
+float32 orientation_raw
+float32 rotation
