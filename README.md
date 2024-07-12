@@ -30,11 +30,9 @@ ros2 launch ./src/launch/vex_launch.launch.py
 
 The file launches the entire ROS-VEX system. To change dynamic initialization you must change the file vex_config.
 
-## Running nodes 
-Each node can be launched in the following way :
+## Running nodes from model 
+Model node can be launch with the following command:
 
 ```
-ros2 run camera "node_name"
+ros2 run model model
 ```
-
-With node_name being either "talker" , "event" or "frame". Talker is the node retrieving data from the camera and publishing them to the corresponding topics, while event and frame are the nodes reading data from those topics and displaying them.
