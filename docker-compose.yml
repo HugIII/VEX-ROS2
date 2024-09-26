@@ -1,0 +1,16 @@
+services:
+  ros2_galactic:
+    image: osrf/ros:galactic-desktop
+    #stdin_open: true # docker run -i
+    #tty: true        # docker run -t
+    volumes:
+      - .:/home
+    command: >
+      bash -c "cd /home
+      && touch test.txt
+      "
+      
+    
+    
+    
+    
