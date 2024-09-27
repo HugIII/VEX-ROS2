@@ -5,7 +5,7 @@
 	},
 	"project": {
 		"name": "VEXv5_ROS2_Interface",
-		"description": "Code Designed to comunicate to a ROS2 node through serial",
+		"description": "Code Designed to comunicate to a ROS2 node through a serial connection",
 		"creationDate": "26/9/2024, 3:32:14 PM",
 		"platform": "V5",
 		"language": "cpp",

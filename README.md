@@ -24,7 +24,7 @@ docker compose down
 
 You can experiment with ROS2 and launching modules using the command
 ```
-docker compose run ros2_galactic bash
+docker compose run -rm ros2_galactic bash
 ```
 to launch the container and put you in a bash shell inside the container.
 To close the container just type
