@@ -1,16 +1,23 @@
 services:
   ros2_galactic:
-    image: osrf/ros:galactic-desktop
+    image: VEX-ROS2-USER/custom_docker:local_image
     #stdin_open: true # docker run -i
     #tty: true        # docker run -t
     volumes:
-      - .:/home
+      - ./vex_brain:/home/VEX-ROS/vex_brain
+      - ./vex_message:/home/VEX-ROS/vex_message
+      - ./model:/home/VEX-ROS/model
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
       - /dev/ttyACM1:/dev/ttyACM1
     command: >
-      bash -c "cd /home
-      && touch test.txt
+      bash -c "cd /home/VEX-ROS
+      && colcon build --packages-select vex_message
+      && colcon build --packages-select vex_brain
+      && . install/setup.bash
+      && colcon build --packages-select model
+      && . install/setup.bash
+      && bash
       "
       
     

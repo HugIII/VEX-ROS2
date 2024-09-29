@@ -26,7 +26,7 @@ def generate_launch_description():
 	screen = False
 	
 	#open the config for dynamical communication
-	f = open("./vex_config")
+	f = open("./vex_brain/vex_config")
 	
 
 	content = f.read().split("\n")[:-1]
@@ -56,7 +56,7 @@ def generate_launch_description():
 	f.close()
 	
 	#reppon the file to active the right node 
-	f = open("./vex_config")
+	f = open("./vex_brain/vex_config")
 	
 	content = f.read().split("\n")
 	

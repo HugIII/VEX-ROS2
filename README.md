@@ -1,54 +1,64 @@
 # VEX-ROS2
 
 ROS2 packages managing the communication of the VEX and the ROS system and ROS module with template for neuromorphic neural network. 
-This package has been developped under ROS2 Galactic (https://docs.ros.org/en/galactic/index.html).
+This package has been developped under [ROS2 Galactic](https://docs.ros.org/en/galactic/index.html).
+
+## Prerequisite
+
+The package either requires the installation of [Docker Desktop](https://docs.docker.com/desktop/) or [Docker Engine](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/) (recommended) or the installation of ROS2 galactic and a full C++ and Python3 development environments with pyserial (for more expert users). 
+It also requires the installation of a developpent environment for the VEX v5 brain, either the official [VEX VS Code Extension](https://www.vexrobotics.com/vexcode/vscode-extension) (recommended) or the official IDE [VEXcode V5](https://www.vexrobotics.com/vexcode/install/v5) (unsupported).
+
+The docker package, due to link serial over usb link, is develloped on Linux (ubuntu) and Windows using WSL2, MacOS is untested.
 
 ## Usage 
 
-We strongly recommend the use of docker by using an image containing an Ubuntu 20.04.6 with an installation of ROS2 galactic.
+We strongly recommend the use of our docker image containing an Ubuntu 20.04.6 with an installation of ROS2 galactic (based on a [community ROS2 galactic container](https://docs.ros.org/en/galactic/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html)).
 
-First, the container image must be pulled before being used.
-
+First, the container image must be build locally using the `initialize.sh` script.
 ```
-docker pull osrf/ros:galactic-desktop
+bash initialize.sh
 ```
 
 Then you can start the predefined launch sequence using
 ```
-docker compose up -d
+docker compose run -rm ros2_galactic
 ```
-and close it using
-```
-docker compose down
-```
+and get in a bash shell inside the container.
 
-You can experiment with ROS2 and launching modules using the command
+You can experiment with ROS2 and compiling modules by skipping the launch sequence using the command
 ```
 docker compose run -rm ros2_galactic bash
 ```
-to launch the container and put you in a bash shell inside the container.
+to launch the container and put you in a bash shell inside the bare container.
+
 To close the container just type
 ```
 exit
 ```
 
 ## Compilation
-You first need to compile the vex_message package before compiling the vex_brain one. 
+The compilation is part of the automatic launch sequence, this section is only useful if you choose to skip it while launching the container or not use the provided docker image. 
+
+You first need to compile the vex_message and vex_brain packages. 
 ```
 colcon build --packages-select vex_message
-```
-
-```
 colcon build --packages-select vex_brain
 ```
 
+Then, before compiling the model package, the previous packages must be sourced, resulting in the command
 ```
+. install/setup.bash
 colcon build --packages-select model
+```
+
+Then the entirety of the packages can be sourced using the same command as before.
+
+```
+. install/setup.bash
 ```
 ## Running Vex program 
 
-To launch the VEX program, download the code from the VEX application and launch it.
-(https://www.vexrobotics.com/vexcode/install/v5)
+To launch the VEX program, compile the cpp code contaided in the vex_code directory and flash it to the brain. The code in the vex_code directory is structured for the VEX VS code extension.
 
 ## Running Launch 
 For run the file launch :
