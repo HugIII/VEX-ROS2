@@ -60,7 +60,7 @@ public:
 		speed = smooth_speed;
 
 		auto message = std_msgs::msg::Float32();
-		message.data = voltage;
+		message.data = 12000;
 		publisher_motor->publish(message);
 	}
 	
@@ -173,7 +173,7 @@ public:
 	void setup_pub_sub() override{
 		publisher_motor = this->create_publisher<std_msgs::msg::Float32>("SpinVolt_motor_1",10);
 		
-		subscription_rotation= this->create_subscription<vex_message::msg::Vexrotationsensor>("out_rotationsensor_2",10,std::bind(&Hco_process::rotation_callback,this,_1));
+		subscription_rotation = this->create_subscription<vex_message::msg::Vexrotationsensor>("out_rotationsensor_2",10,std::bind(&Hco_process::rotation_callback,this,_1));
 	}
 
 	rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr publisher_motor;

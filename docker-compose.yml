@@ -2,24 +2,31 @@ services:
   ros2_galactic:
     image: VEX-ROS2-USER/custom_docker:local_image
     #stdin_open: true # docker run -i
-    #tty: true        # docker run -t
+    tty: true        # docker run -t
+    privileged: true
     volumes:
+      # VEX ROS2 volumes
       - ./vex_brain:/home/VEX-ROS/vex_brain
       - ./vex_message:/home/VEX-ROS/vex_message
+      - ./vex_plot:/home/VEX-ROS/vex_plot
       - ./model:/home/VEX-ROS/model
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
       - /dev/ttyACM1:/dev/ttyACM1
+    network_mode: "host"
     command: >
       bash -c "cd /home/VEX-ROS
-      && colcon build --packages-select vex_message
-      && colcon build --packages-select vex_brain
-      && . install/setup.bash
-      && colcon build --packages-select model
-      && . install/setup.bash
+      && rm -rf vex_brain/.vex_brain_running
+      && echo Start of Colcon Build
+      && colcon build --packages-select vex_message 2>/dev/null
+      && colcon build --packages-select vex_brain 2>/dev/null
+      && source install/setup.bash
+      && colcon build --packages-select model 2>/dev/null
+      && colcon build --packages-select vex_plot 2>/dev/null
+      && source install/setup.bash
+      && echo End of Colcon Build
       && bash
       "
-      
     
     
     

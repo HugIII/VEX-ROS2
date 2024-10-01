@@ -8,13 +8,13 @@ This package has been developped under [ROS2 Galactic](https://docs.ros.org/en/g
 The package either requires the installation of [Docker Desktop](https://docs.docker.com/desktop/) or [Docker Engine](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/) (recommended) or the installation of ROS2 galactic and a full C++ and Python3 development environments with pyserial (for more expert users). 
 It also requires the installation of a developpent environment for the VEX v5 brain, either the official [VEX VS Code Extension](https://www.vexrobotics.com/vexcode/vscode-extension) (recommended) or the official IDE [VEXcode V5](https://www.vexrobotics.com/vexcode/install/v5) (unsupported).
 
-The docker package, due to link serial over usb link, is develloped on Linux (ubuntu) and Windows using WSL2, MacOS is untested.
+The docker package, due to link serial over usb link, is develloped on Linux (ubuntu), Windows should work using WSL2 and MacOS is untested.
 
 ## Usage 
 
-We strongly recommend the use of our docker image containing an Ubuntu 20.04.6 with an installation of ROS2 galactic (based on a [community ROS2 galactic container](https://docs.ros.org/en/galactic/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html)).
+We strongly recommend the use of our docker image containing an Ubuntu 20.04.6 with an installation of ROS2 galactic (based on a [community-made ROS2 galactic image](https://docs.ros.org/en/galactic/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html)).
 
-First, the container image must be build locally using the `initialize.sh` script.
+First, a local image must be build using the `initialize.sh` script.
 ```
 bash initialize.sh
 ```
@@ -23,13 +23,13 @@ Then you can start the predefined launch sequence using
 ```
 docker compose run -rm ros2_galactic
 ```
-and get in a bash shell inside the container.
+and get in a bash shell inside the container after some setup.
 
-You can experiment with ROS2 and compiling modules by skipping the launch sequence using the command
+Or you can experiment with ROS2 and compiling modules by skipping the launch sequence using the command
 ```
 docker compose run -rm ros2_galactic bash
 ```
-to launch the container and put you in a bash shell inside the bare container.
+to launch the container without setup. The ROS2 code is found in the `/home/VEX-ROS` directory.
 
 To close the container just type
 ```
@@ -63,7 +63,7 @@ To launch the VEX program, compile the cpp code contaided in the vex_code direct
 ## Running Launch 
 For run the file launch :
 ```
-ros2 launch ./src/launch/vex_launch.launch.py
+ros2 launch ./vex_brain/launch/vex_launch.launch.py
 ```
 
 The file launches the entire ROS-VEX system. To change dynamic initialization you must change the file vex_config.

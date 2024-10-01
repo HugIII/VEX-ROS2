@@ -48,7 +48,7 @@ public:
 		
 		this->initial_value_setup(&state,&input);
 		
-		std::cout << "error before"  << std::endl;
+		//std::cout << "error before"  << std::endl;
 		
 		this->getTempTimer(timer);
 		
@@ -85,7 +85,7 @@ private:
 	}
 	
 	void sim_function(){
-		std::cout << "timer entry " << std::endl;
+		//std::cout << "timer entry " << std::endl;
   		
   		this->sim_com(input,output);
   		this->dyn_system(input,state,dstate,output);
