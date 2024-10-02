@@ -12,8 +12,8 @@ function kill_recurse() {
 }
 
 # Set the working directory to the directory of this script
-run_file_name=.model_running
-log_file_name=model_run.log
+run_file_name=.vex_log_running
+log_file_name=vex_log_run.log
 cd ${0%/*}
 
 # Check if an argument was provided
@@ -32,7 +32,7 @@ case $1 in
             exit 1
         else
             rm -rf $log_file_name
-            ros2 run model model >$log_file_name & 
+            ros2 run vex_log server >$log_file_name &
             BRAIN_PID=$!
             echo $BRAIN_PID > $run_file_name
             echo "Vex_brain launched"
@@ -40,12 +40,11 @@ case $1 in
         ;;
 
     # Shutdown the vex_brain node
-    "shutdown")
+    "shutdown" )
         if [ -f "$run_file_name" ]; then
             BRAIN_PID=$(cat $run_file_name)
             rm $run_file_name
             kill_recurse $BRAIN_PID
-            ros2 run model down
             echo "Vex_brain shutdown"
         else
             echo "Vex_brain was not running"

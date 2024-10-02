@@ -4,6 +4,9 @@
 #include "std_msgs/msg/float32.hpp"
 
 #include "template.cpp"
+#include "fast_tanh.cpp"
+
+#define SMOOTHING_PERIOD 9
 
 class Hco_process: public Template{
 public:
@@ -36,7 +39,7 @@ public:
 
 		(*input)[2] = -3.5; // gsm
 
-		(*input)[3] = -2; // Iapp
+		(*input)[3] = 0; // Iapp
 
 		(*input)[4] = 12000.0; // gsyn
 		(*input)[5] = 0.0;	  // dsyn
@@ -60,7 +63,7 @@ public:
 		speed = smooth_speed;
 
 		auto message = std_msgs::msg::Float32();
-		message.data = 12000;
+		message.data = tmp_voltage;
 		publisher_motor->publish(message);
 	}
 	
@@ -190,4 +193,7 @@ private:
 	double angle=0;
 	double speed=0;
 	double voltage=0;
+	double smoothing_filter[SMOOTHING_PERIOD];
+	double filter_sum = 0;
+	int filter_ind = 0;
 };

@@ -15,10 +15,15 @@ find_package(vex_message REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(model src/model.cpp)
+add_executable(down src/down.cpp)
 ament_target_dependencies(model rclcpp std_msgs vex_message)
+ament_target_dependencies(down rclcpp std_msgs vex_message)
 
 install(TARGETS
 	model
+	DESTINATION lib/${PROJECT_NAME})
+install(TARGETS
+	down
 	DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

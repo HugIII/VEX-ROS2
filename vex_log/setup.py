@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'vex_plot'
+package_name = 'vex_log'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'server = vex_plot.server:main',
+            'server = vex_log.server:main',
         ],
     },
 )
