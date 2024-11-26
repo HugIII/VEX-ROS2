@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'server = vex_log.server:main',
+            'logger = vex_log.logger:main',
         ],
     },
 )

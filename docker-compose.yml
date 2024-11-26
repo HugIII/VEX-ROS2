@@ -5,6 +5,8 @@ services:
     #stdin_open: true # docker run -i
     #tty: true        # docker run -t
     #privileged: true
+    environment:
+      - VEX_CONNECTED=${VEX_CONNECTED}
     ports:
       - name: "ros2_galactic_comm"
         protocol: "tcp"
@@ -18,8 +20,8 @@ services:
       - ./vex_log:/home/VEX-ROS/vex_log
       - ./model:/home/VEX-ROS/model
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/ttyACM1:/dev/ttyACM1
+      - ${VEX_COM_PORT:-/dev/null}:/dev/ttyACM0
+      - ${VEX_USER_PORT:-/dev/null}:/dev/ttyACM1
     command: >
       bash -c "cd /home/VEX-ROS
       && ./entrypoint.sh ${MODE}

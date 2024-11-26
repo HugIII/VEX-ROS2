@@ -44,6 +44,7 @@ case $1 in
         if [ -f "$run_file_name" ]; then
             BRAIN_PID=$(cat $run_file_name)
             rm $run_file_name
+            ros2 topic pub -1 /terminate_log std_msgs/msg/Empty
             kill_recurse $BRAIN_PID
             echo "Vex_brain shutdown"
         else

@@ -14,16 +14,24 @@ find_package(vex_message REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+add_library(simulator STATIC src/simulator.cpp)
+ament_target_dependencies(simulator rclcpp std_msgs vex_message)
 add_executable(model src/model.cpp)
 add_executable(down src/down.cpp)
+add_executable(testModel src/testModel.cpp)
+target_link_libraries(testModel simulator)
 ament_target_dependencies(model rclcpp std_msgs vex_message)
 ament_target_dependencies(down rclcpp std_msgs vex_message)
+ament_target_dependencies(testModel rclcpp std_msgs vex_message)
 
 install(TARGETS
 	model
 	DESTINATION lib/${PROJECT_NAME})
 install(TARGETS
 	down
+	DESTINATION lib/${PROJECT_NAME})
+install(TARGETS
+	testModel
 	DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

@@ -1,6 +1,7 @@
 import socket
 import os
 import time
+from datetime import datetime
 
 import rclpy
 from rclpy.node import Node
@@ -15,16 +16,18 @@ from vex_message.msg import Vexcommand
 
 from std_msgs.msg import Empty
 
-running = True
-
-class Server(Node):
-    def __init__(self, hostname):
-        super().__init__("server")
+class Logger(Node):
+    def __init__(self, filename):
+        super().__init__("logger")
         
-        self.sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.sock.bind((hostname,6969))
+        self.log_filename = "./data_logs/" + filename
+        
+        # Erase the file if it exists and create a new one (filename should be unique so it should not happen)
+        with open(self.log_filename, 'w') as file:
+            file.write("time,angle,velocity\n")
+        
         self.msg_received = []
-
+        
         self.mutex = Lock()
         
         self.subscription = self.create_subscription(
@@ -43,15 +46,11 @@ class Server(Node):
         )
         self.terminate
         
-        # declare the timer for a 100Hz Socket Communication 		
-        timer_period = 0.01
+        # declare the timer for a 10Hz Data Logging		
+        timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.timer_callback)
         
-        self.sock.listen(1)
-        self.conn, self.addr = self.sock.accept()
-        #self.sock.setblocking(False)
-        
-        self.get_logger().info("Connecting with: " + str(self.addr))
+        self.get_logger().info("Logging in : " + self.log_filename)
         
     def listener_callback(self,msg):
         try:
@@ -60,8 +59,6 @@ class Server(Node):
                 self.msg_received.append((t, msg))
             #self.sock.recv(1024)
         except:
-            self.conn.close()
-            self.sock.close()
             self.get_logger().info("Sensor error: Connection severed with: " + str(self.addr))
             raise SystemExit 
         
@@ -70,11 +67,10 @@ class Server(Node):
         with self.mutex:
             local_msg, self.msg_received = self.msg_received, []
         try:
-            for t, msg in local_msg:
-                self.conn.send(str.encode(str(t)+"\n"+str(msg.angle)+"\n"+str(msg.velocity)))
+            with open(self.log_filename, 'a') as file:
+                for t, msg in local_msg:
+                    file.write(str(t)+","+str(msg.angle)+","+str(msg.velocity)+"\n")
         except:
-            self.conn.close()
-            self.sock.close()
             self.get_logger().info("Connection broken with: " + str(self.addr))
             raise SystemExit
         
@@ -84,28 +80,32 @@ class Server(Node):
             self.destroy_subscription(self.subscription)
             self.destroy_subscription(self.terminate)
             self.destroy_timer(self.timer)
-            self.conn.close()
-            self.sock.close()
-            self.get_logger().info("Shutdown message received: Closing Server")
-            # Shutdown server completely
-            running = False
+            local_msg = self.msg_received
+            try:
+                with open(self.log_filename, 'a') as file:
+                    for t, msg in local_msg:
+                        file.write(str(t)+","+str(msg.angle)+","+str(msg.velocity)+"\n")
+            except:
+                pass
         raise SystemExit
+                    
+        
 
 def main(args=None):
-    while running:
-        rclpy.init(args=args)
+    rclpy.init(args=args)
 
-        # socket.gethostbyname(os.environ["PARENTHOSTNAME"])
-        server = Server('0.0.0.0')
-        
-        try:
-            rclpy.spin(server)
-        except SystemExit:
-            pass   
-        
-        server.destroy_node()
-        
-        rclpy.shutdown()
+    # socket.gethostbyname(os.environ["PARENTHOSTNAME"])
+    # Automatic filename generation
+    logger = Logger(datetime.now().strftime('%Y-%m-%d_H%H-%M-%S_log.csv'))
+    
+    try:
+        rclpy.spin(logger)
+    except SystemExit:
+        pass   
+    
+    logger.destroy_node()
+    
+    rclpy.shutdown()
     
 if __name__ == '__main__':
     main()

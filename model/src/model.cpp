@@ -92,16 +92,16 @@ private:
 			
 		auto step = *timer * 0.000001;	
 			
-    		for (int i = 0 ; i < *nb_state ; i++) {
-      			state2[i] = state[i] + step*dstate[i];
-    		}
+		for (int i = 0 ; i < *nb_state ; i++) {
+			state2[i] = state[i] + step*dstate[i];
+		}
 
 
-    		this->dyn_system(input,state2,dstate2,output);
+		this->dyn_system(input,state2,dstate2,output);
 
-    		for (int i = 0 ; i < *nb_state ; i++) {
-      			state[i] = state[i] + step*(dstate[i] + dstate2[i])/2;
-    		}
+		for (int i = 0 ; i < *nb_state ; i++) {
+			state[i] = state[i] + step*(dstate[i] + dstate2[i])/2;
+		}
       }
 };
 
