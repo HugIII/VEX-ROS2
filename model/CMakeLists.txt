@@ -19,10 +19,13 @@ ament_target_dependencies(simulator rclcpp std_msgs vex_message)
 add_executable(model src/model.cpp)
 add_executable(down src/down.cpp)
 add_executable(testModel src/testModel.cpp)
+add_executable(hco src/hco.cpp)
 target_link_libraries(testModel simulator)
+target_link_libraries(hco simulator)
 ament_target_dependencies(model rclcpp std_msgs vex_message)
 ament_target_dependencies(down rclcpp std_msgs vex_message)
 ament_target_dependencies(testModel rclcpp std_msgs vex_message)
+ament_target_dependencies(hco rclcpp std_msgs vex_message)
 
 install(TARGETS
 	model
@@ -32,6 +35,9 @@ install(TARGETS
 	DESTINATION lib/${PROJECT_NAME})
 install(TARGETS
 	testModel
+	DESTINATION lib/${PROJECT_NAME})
+install(TARGETS
+	hco
 	DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
