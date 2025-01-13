@@ -1,16 +1,6 @@
 #!/bin/bash
 # This script is used to launch and shutdown the vex_brain node
 
-# Function to kill a process and all of its children
-function kill_recurse() {
-    cpids=`pgrep -P $1|xargs`
-    for cpid in $cpids;
-    do
-        kill_recurse $cpid
-    done
-    kill -9 $1
-}
-
 # Set the working directory to the directory of this script
 run_file_name=.model_running
 log_file_name=model_run.log
@@ -28,14 +18,14 @@ case $1 in
     # Launch the vex_brain node
     "launch" )
         if [ -f "$run_file_name" ]; then
-            echo "Vex_brain is already running"
+            echo "model is already running"
             exit 1
         else
             rm -rf $log_file_name
             ros2 run model model >$log_file_name & 
             BRAIN_PID=$!
             echo $BRAIN_PID > $run_file_name
-            echo "Vex_brain launched"
+            echo "model launched"
         fi
         ;;
 
@@ -44,11 +34,10 @@ case $1 in
         if [ -f "$run_file_name" ]; then
             BRAIN_PID=$(cat $run_file_name)
             rm $run_file_name
-            kill_recurse $BRAIN_PID
-            ros2 run model down
-            echo "Vex_brain shutdown"
+            ros2 topic pub -1 /terminate_sim std_msgs/msg/Empty> /dev/null
+            echo "model shutdown (id: $BRAIN_PID)"
         else
-            echo "Vex_brain was not running"
+            echo "model was not running"
             exit 1
         fi
         ;;

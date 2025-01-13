@@ -15,7 +15,6 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "vex_message/msg/vexmsg.hpp"
 #include "std_msgs/msg/empty.hpp"
 
 //change to the model we want to use

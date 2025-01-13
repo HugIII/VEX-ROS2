@@ -15,6 +15,8 @@ from vex_message.msg import Vexrotationsensor
 from vex_message.msg import Vexcommand
 
 from std_msgs.msg import Empty
+from std_msgs.msg import Int64
+from std_msgs.msg import Float64
 
 class Logger(Node):
     def __init__(self, filename):
@@ -24,15 +26,15 @@ class Logger(Node):
         
         # Erase the file if it exists and create a new one (filename should be unique so it should not happen)
         with open(self.log_filename, 'w') as file:
-            file.write("time,angle,velocity\n")
+            file.write("time,count\n")
         
         self.msg_received = []
         
         self.mutex = Lock()
         
         self.subscription = self.create_subscription(
-            Vexrotationsensor,
-            'out_rotationsensor_2',
+            Float64,
+            'count_topic',
             self.listener_callback,
             10
         )
@@ -69,7 +71,7 @@ class Logger(Node):
         try:
             with open(self.log_filename, 'a') as file:
                 for t, msg in local_msg:
-                    file.write(str(t)+","+str(msg.angle)+","+str(msg.velocity)+"\n")
+                    file.write(str(t)+","+str(msg.data)+"\n")
         except:
             self.get_logger().info("Connection broken with: " + str(self.addr))
             raise SystemExit

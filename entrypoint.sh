@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /ros_entrypoint.sh 
+
 # Clear the possible lock files
 rm -rf vex_brain/.vex_brain_running
 rm -rf model/.model_running
@@ -16,7 +18,7 @@ source install/setup.bash
 echo End of Colcon Build
 
 # Use appropritate command base on launch mode
-case $1 in
+case $MODE in
     "launch")
         vex_brain\manager.sh launch
         model\manager.sh launch

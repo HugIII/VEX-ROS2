@@ -28,14 +28,14 @@ case $1 in
     # Launch the vex_brain node
     "launch" )
         if [ -f "$run_file_name" ]; then
-            echo "Vex_brain is already running"
+            echo "Logger is already running"
             exit 1
         else
             rm -rf $log_file_name
-            ros2 run vex_log server >$log_file_name &
+            ros2 run vex_log logger >$log_file_name &
             BRAIN_PID=$!
             echo $BRAIN_PID > $run_file_name
-            echo "Vex_brain launched"
+            echo "Logger launched"
         fi
         ;;
 
@@ -44,11 +44,10 @@ case $1 in
         if [ -f "$run_file_name" ]; then
             BRAIN_PID=$(cat $run_file_name)
             rm $run_file_name
-            ros2 topic pub -1 /terminate_log std_msgs/msg/Empty
-            kill_recurse $BRAIN_PID
-            echo "Vex_brain shutdown"
+            ros2 topic pub -1 /terminate_log std_msgs/msg/Empty >/dev/null
+            echo "Logger shutdown (id: $BRAIN_PID)"
         else
-            echo "Vex_brain was not running"
+            echo "Logger was not running"
             exit 1
         fi
         ;;

@@ -97,7 +97,7 @@ case $argument in
     # Launch container with run to debug
     "debug")
         export MODE="debug"
-        docker compose run --rm --service-ports ros2_galactic
+        docker compose run --rm --service-ports ros2_to_vex_container
         ;;
 
     # Invalid argument

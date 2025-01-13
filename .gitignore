@@ -220,6 +220,8 @@ cython_debug/
 build
 install
 log
+# Matlab
+matlab_msg_gen
 
 # log data (should be ignored)
 *.log

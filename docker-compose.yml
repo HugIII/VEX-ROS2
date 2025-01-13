@@ -1,28 +1,46 @@
 services:
-  ros2_galactic:
-    container_name: ros2_galactic
-    image: VEX-ROS2-USER/custom_docker:local_image
-    #stdin_open: true # docker run -i
-    #tty: true        # docker run -t
-    #privileged: true
+  ros2_to_vex_container:
+    container_name: ros2_to_vex_container
+    image: VEX-ROS2-USER/custom_humble:local_image
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+        - USERNAME=${USERNAME:-devuser}
+    user: ${USERNAME:-devuser}
+    # Interactive shell
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    # Networking and IPC for ROS 2
+    network_mode: host
+    ipc: host
+    # Useful for easier com + possible graphical applications
+    privileged: true
     environment:
-      - VEX_CONNECTED=${VEX_CONNECTED}
-    ports:
-      - name: "ros2_galactic_comm"
-        protocol: "tcp"
-        target: 6969
-        published: "6969"
-        mode: ingress
+      - VEX_CONNECTED=${VEX_CONNECTED:-false}
+      - MODE=${MODE:-debug}
+    #ports:
+    #  - name: "ros2_galactic_comm"
+    #    protocol: "tcp"
+    #    target: 6969
+    #    published: "6969"
+    #    mode: ingress
     volumes:
-      # VEX ROS2 volumes
-      - ./vex_brain:/home/VEX-ROS/vex_brain
-      - ./vex_message:/home/VEX-ROS/vex_message
-      - ./vex_log:/home/VEX-ROS/vex_log
-      - ./model:/home/VEX-ROS/model
+      # Colcon volumes (for faster build)
+      - ./build:/VEX-ROS/build
+      - ./install:/VEX-ROS/install
+      - ./log:/VEX-ROS/log
+      # VEX ROS2 package volumes
+      - ./vex_brain:/VEX-ROS/vex_brain
+      - ./vex_message:/VEX-ROS/vex_message
+      - ./vex_log:/VEX-ROS/vex_log
+      - ./model:/VEX-ROS/model
     devices:
       - ${VEX_COM_PORT:-/dev/null}:/dev/ttyACM0
       - ${VEX_USER_PORT:-/dev/null}:/dev/ttyACM1
-    command: >
-      bash -c "cd /home/VEX-ROS
-      && ./entrypoint.sh ${MODE}
-      "
+    command: bash
+      #bash -c "cd /home/VEX-ROS
+      #&& ./entrypoint.sh ${MODE}
+      #"
