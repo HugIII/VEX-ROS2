@@ -29,18 +29,17 @@ services:
     #    mode: ingress
     volumes:
       # Colcon volumes (for faster build)
-      - ./build:/VEX-ROS/build
-      - ./install:/VEX-ROS/install
-      - ./log:/VEX-ROS/log
+      #- ./build:/VEX-ROS/build
+      #- ./install:/VEX-ROS/install
+      #- ./log:/VEX-ROS/log
       # VEX ROS2 package volumes
       - ./vex_brain:/VEX-ROS/vex_brain
       - ./vex_message:/VEX-ROS/vex_message
-      - ./vex_log:/VEX-ROS/vex_log
-      - ./model:/VEX-ROS/model
+      #- ./vex_log:/VEX-ROS/vex_log
     devices:
       - ${VEX_COM_PORT:-/dev/null}:/dev/ttyACM0
       - ${VEX_USER_PORT:-/dev/null}:/dev/ttyACM1
-    command: bash
+    command: cd vex_brain && ros2 launch ./launch/vex_brain_launch.py
       #bash -c "cd /home/VEX-ROS
       #&& ./entrypoint.sh ${MODE}
       #"

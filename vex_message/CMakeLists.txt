@@ -33,7 +33,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 	"msg/Drawline.msg"
 	"msg/Point.msg"
 	"msg/Color.msg"
+	DEPENDENCIES std_msgs
+	ADD_LINTER_TESTS
 	)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -50,5 +53,5 @@ if(BUILD_TESTING)
 endif()
 
 
-#ament_export_dependencies(rosidl_default_runtime)
+ament_export_dependencies(rosidl_default_runtime)
 ament_package()
